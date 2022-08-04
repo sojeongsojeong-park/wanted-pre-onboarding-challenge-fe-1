@@ -15,7 +15,7 @@ function SignUp() {
   const passwordChangeHandler = (e) => {
     setPasswordInput(e.target.value);
   };
-  const signupClickHandler = () => {
+  const signupClickHandler = async () => {
     if (!emailValidation) {
       alert("이메일을 확인해 주세요.");
     } else if (passwordValidation) {
@@ -28,7 +28,7 @@ function SignUp() {
           password: passwordInput,
         };
 
-        fetch("http://localhost:8080/users/create", {
+        await fetch("http://localhost:8080/users/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -51,13 +51,13 @@ function SignUp() {
     <div>
       <input
         type='text'
-        placeholder='아이디를 입력하세요'
+        placeholder='email'
         value={idInput}
         onChange={idChangeHandler}
       />
       <input
         type='password'
-        placeholder='비밀번호를 입력하세요'
+        placeholder='password'
         value={passwordInput}
         onChange={passwordChangeHandler}
       />

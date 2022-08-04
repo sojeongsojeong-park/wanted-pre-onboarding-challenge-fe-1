@@ -17,7 +17,7 @@ function Login() {
   const passwordChangeHandler = (e) => {
     setPasswordInput(e.target.value);
   };
-  const signupClickHandler = () => {
+  const signupClickHandler = async () => {
     if (!emailValidation) {
       alert("이메일을 확인해 주세요.");
     } else if (passwordValidation) {
@@ -33,7 +33,7 @@ function Login() {
           password: passwordInput,
         };
 
-        fetch("http://localhost:8080/users/login", {
+        await fetch("http://localhost:8080/users/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -57,13 +57,13 @@ function Login() {
     <div>
       <input
         type='text'
-        placeholder='아이디를 입력하세요'
+        placeholder='email'
         value={idInput}
         onChange={idChangeHandler}
       />
       <input
         type='password'
-        placeholder='비밀번호를 입력하세요'
+        placeholder='password'
         value={passwordInput}
         onChange={passwordChangeHandler}
       />
