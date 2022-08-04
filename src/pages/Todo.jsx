@@ -23,13 +23,16 @@ function Todo() {
         .then((res) => res.json())
         .then((res) => setGetTodo(res.data));
     })();
-  }, [createState]);
+  }, [createState, clickedId.state]);
 
   const addTodoClickHandler = () => {
     setCreateState(true);
   };
   const createTodoHandler = (value) => {
     setCreateState(value);
+  };
+  const updateTodoHandler = (value, id) => {
+    setClickedId({ state: value, id: id });
   };
   const TodoLiClickHandler = (e) => {
     setClickedId({ state: true, id: e.target.id });
@@ -46,7 +49,13 @@ function Todo() {
           );
         })}
       </ul>
-      {clickedId.state && <TodoDetail id={clickedId.id} token={token} />}
+      {clickedId.state && (
+        <TodoDetail
+          updateTodoHandler={updateTodoHandler}
+          id={clickedId.id}
+          token={token}
+        />
+      )}
       {createState && (
         <CreateTodo createTodoHandler={createTodoHandler} token={token} />
       )}
