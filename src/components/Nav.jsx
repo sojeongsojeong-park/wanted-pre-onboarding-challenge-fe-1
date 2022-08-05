@@ -14,7 +14,6 @@ function Nav() {
 export default Nav;
 
 const NavContainer = styled.nav`
-  display: flex;
   width: 100vw;
 `;
 
@@ -32,8 +31,8 @@ const LoginButton = styled(NavLink)`
   cursor: pointer;
   border-radius: 0.7rem;
   position: relative;
-  top: 1rem;
-  left: -6vw;
+  top: -4.2rem;
+  left: 80vw;
   &:hover {
     background-color: #ffb4b4;
     color: #fff;
