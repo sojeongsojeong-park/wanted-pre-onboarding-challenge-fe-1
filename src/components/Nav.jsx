@@ -1,22 +1,52 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 
 function Nav() {
-  const navigate = useNavigate();
-
-  const loginButtonClickHandler = () => {
-    navigate("/auth/login");
-  };
-  const homeButtonClickHandler = () => {
-    navigate("/");
-  };
-
   return (
-    <div>
-      <button onClick={homeButtonClickHandler}>home</button>
-      <button onClick={loginButtonClickHandler}>login</button>
-    </div>
+    <NavContainer>
+      <HomeButton to='/'>TODO</HomeButton>
+      <LoginButton to='/auth/login'>LOGIN</LoginButton>
+    </NavContainer>
   );
 }
 
 export default Nav;
+
+const NavContainer = styled.nav`
+  display: flex;
+  width: 100vw;
+`;
+
+const LoginButton = styled(NavLink)`
+  display: block;
+  width: 6rem;
+  height: 2.3rem;
+  line-height: 2.3rem;
+  padding: 0.5rem 0;
+  text-align: center;
+  color: #555;
+  font-size: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #ffb4b4;
+  cursor: pointer;
+  border-radius: 0.7rem;
+  position: relative;
+  top: 1rem;
+  left: -6vw;
+  &:hover {
+    background-color: #ffb4b4;
+    color: #fff;
+  }
+`;
+const HomeButton = styled(NavLink)`
+  display: block;
+  color: #ffb4b4;
+  width: 8rem;
+  height: 3rem;
+  text-align: center;
+  line-height: 3rem;
+  margin: 1rem auto;
+  font-size: 2rem;
+  cursor: pointer;
+`;
