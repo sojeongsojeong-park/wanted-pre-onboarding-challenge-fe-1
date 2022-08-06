@@ -18,7 +18,7 @@ function Login() {
   const passwordChangeHandler = (e) => {
     setPasswordInput(e.target.value);
   };
-  const signupClickHandler = async () => {
+  const loginClickHandler = async () => {
     if (localStorage.getItem("token")) {
       navigate("/");
     } else if (!emailValidation) {
@@ -43,15 +43,18 @@ function Login() {
         })
           .then((res) => res.json())
           .then((res) => {
-            console.log(res);
             if (res.token) localStorage.setItem("token", res.token);
             if (res.message) alert(res.message);
             if (res.details) alert(res.details);
-          });
+          })
+          .then(navigate("/"));
       } catch (e) {
         console.error(e);
       }
     }
+  };
+  const signupClickHandler = () => {
+    navigate("/auth/signup");
   };
 
   return (
@@ -69,7 +72,7 @@ function Login() {
           value={passwordInput}
           onChange={passwordChangeHandler}
         />
-        <LoginButton onClick={signupClickHandler}> Login </LoginButton>
+        <LoginButton onClick={loginClickHandler}> Login </LoginButton>
         <DivideLine />
         <Para>if you don't have account</Para>
         <SignupButton onClick={signupClickHandler}> Sign up </SignupButton>
