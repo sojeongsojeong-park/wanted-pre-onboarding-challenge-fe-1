@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-function Login() {
+function Login({ handleLoginToken }) {
   const [idInput, setIdInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const navigate = useNavigate();
@@ -47,7 +47,10 @@ function Login() {
             if (res.message) alert(res.message);
             if (res.details) alert(res.details);
           })
-          .then(navigate("/"));
+          .then(() => {
+            handleLoginToken(localStorage.getItem("token"));
+            navigate("/");
+          });
       } catch (e) {
         console.error(e);
       }

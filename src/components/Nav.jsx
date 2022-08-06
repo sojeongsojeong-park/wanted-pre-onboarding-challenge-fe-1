@@ -2,11 +2,22 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-function Nav() {
+function Nav({ handleLoginToken, token }) {
+  const logoutClickHandler = () => {
+    localStorage.removeItem("token");
+    handleLoginToken(null);
+  };
+
   return (
     <NavContainer>
       <HomeButton to='/'>TODO</HomeButton>
-      <LoginButton to='/auth/login'>LOGIN</LoginButton>
+      {token === null ? (
+        <LoginButton to='/auth/login'>LOGIN</LoginButton>
+      ) : (
+        <LoginButton to='/' onClick={logoutClickHandler}>
+          LOGOUT
+        </LoginButton>
+      )}
     </NavContainer>
   );
 }
