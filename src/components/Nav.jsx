@@ -6,6 +6,7 @@ function Nav({ handleLoginToken, token }) {
   const logoutClickHandler = () => {
     localStorage.removeItem("token");
     handleLoginToken(null);
+    alert("logout!");
   };
 
   return (
