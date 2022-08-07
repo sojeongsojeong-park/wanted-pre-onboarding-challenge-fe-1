@@ -22,9 +22,9 @@ function Login({ handleLoginToken }) {
     if (localStorage.getItem("token")) {
       navigate("/");
     } else if (!emailValidation) {
-      alert("이메일을 확인해 주세요.");
+      alert("Please check your email address");
     } else if (passwordValidation) {
-      alert("비밀번호는 8자 이상이어야 합니다.");
+      alert("password must be over 8 letters");
     }
 
     if (emailValidation && !passwordValidation) {
@@ -44,7 +44,7 @@ function Login({ handleLoginToken }) {
           .then((res) => res.json())
           .then((res) => {
             if (res.token) localStorage.setItem("token", res.token);
-            if (res.message) alert(res.message);
+            if (res.message) alert("login success!");
             if (res.details) alert(res.details);
           })
           .then(() => {
