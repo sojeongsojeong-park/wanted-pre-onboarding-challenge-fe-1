@@ -1,14 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-function CreateTodo({ createTodoHandler, token }) {
+interface TodoDetailType {
+  id: string;
+  updateTodoHandler: any;
+  updateClickHandler: any;
+  token: string;
+}
+
+function UpdateTodo({
+  id,
+  updateTodoHandler,
+  updateClickHandler,
+  token,
+}: TodoDetailType) {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoContent, setTodoContent] = useState("");
 
-  const titleChangeHandler = (e) => {
+  useEffect(() => {
+    (async () => {
+      await fetch(`http://localhost:8080/todos/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setTodoTitle(res.data.title);
+          setTodoContent(res.data.content);
+        });
+    })();
+  }, []);
+
+  const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(e.target.value);
   };
-  const contentChangeHandler = (e) => {
+  const contentChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTodoContent(e.target.value);
   };
   const clickHandler = async () => {
@@ -17,8 +46,8 @@ function CreateTodo({ createTodoHandler, token }) {
       content: todoContent.toString(),
     };
     try {
-      await fetch("http://localhost:8080/todos", {
-        method: "POST",
+      await fetch(`http://localhost:8080/todos/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -27,40 +56,45 @@ function CreateTodo({ createTodoHandler, token }) {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.data) alert("success!");
+          if (res.data) alert("정상적으로 저장되었습니다.");
           if (res.details) alert(res.details);
-          createTodoHandler(false);
+          updateTodoHandler(true, id, Date.now());
+          updateClickHandler(false);
         });
     } catch (e) {
       console.error(e);
     }
   };
-  const closeClickHandler = () => {
-    createTodoHandler(false);
+  const cancelUpdateClickHandler = () => {
+    updateClickHandler(false);
   };
   return (
-    <CreateTodoSection onClick={closeClickHandler}>
-      <CreateTodoBox onClick={(e) => e.stopPropagation()}>
-        <Close onClick={closeClickHandler}>╳</Close>
+    <UpdateTodoSection onClick={cancelUpdateClickHandler}>
+      <UpdateTodoBox onClick={(e) => e.stopPropagation()}>
+        <Close onClick={cancelUpdateClickHandler}>╳</Close>
         <Input
           placeholder='What you have todo?'
           value={todoTitle}
           onChange={titleChangeHandler}
         />
         <TodoDetail
-          cols='30'
-          rows='10'
+          cols={30}
+          rows={10}
           value={todoContent}
           onChange={contentChangeHandler}
         />
-        <CreateButton onClick={clickHandler}>create Todo</CreateButton>
-      </CreateTodoBox>
-    </CreateTodoSection>
+        <ButtonContainer>
+          <Button onClick={clickHandler}>update Todo</Button>
+          <Button onClick={cancelUpdateClickHandler}>cancel</Button>
+        </ButtonContainer>
+      </UpdateTodoBox>
+    </UpdateTodoSection>
   );
 }
 
-export default CreateTodo;
-const CreateTodoSection = styled.section`
+export default UpdateTodo;
+
+const UpdateTodoSection = styled.section`
   width: 100vw;
   height: 100vh;
   background-color: rgba(255, 255, 255, 0.4);
@@ -68,7 +102,7 @@ const CreateTodoSection = styled.section`
   top: 5rem;
   left: 0;
 `;
-const CreateTodoBox = styled.div`
+const UpdateTodoBox = styled.div`
   width: 30rem;
   height: 30rem;
   background-color: #fff;
@@ -96,9 +130,15 @@ const TodoDetail = styled.textarea`
   padding: 0.5rem;
   box-sizing: border-box;
 `;
-const CreateButton = styled.button`
+const ButtonContainer = styled.ul`
+  width: 80%;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 4rem auto 0;
+`;
+const Button = styled.button`
   display: block;
-  width: 20rem;
+  width: 10rem;
   height: 3rem;
   font-size: 1.5rem;
   color: #555;

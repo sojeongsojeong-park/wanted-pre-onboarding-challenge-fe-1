@@ -3,12 +3,17 @@ import CreateTodo from "../components/CreateTodo";
 import TodoDetail from "../components/TodoDetail";
 import styled from "styled-components";
 
+interface TodoType {
+  token: string | null;
+  clickedId: { state: boolean; id: string; timing: string };
+}
+
 const token = localStorage.getItem("token");
 
 function Todo() {
   const [createState, setCreateState] = useState(false);
   const [getTodo, setGetTodo] = useState([]);
-  const [clickedId, setClickedId] = useState({
+  const [clickedId, setClickedId] = useState<TodoType["clickedId"]>({
     state: false,
     id: "",
     timing: "",
@@ -27,14 +32,16 @@ function Todo() {
     })();
   }, [createState, clickedId.timing]);
 
-  const createTodoHandler = (value) => {
+  const createTodoHandler = (value: boolean) => {
     setCreateState(value);
   };
-  const updateTodoHandler = (value, id, timing) => {
+  const updateTodoHandler = (value: boolean, id: string, timing: string) => {
     setClickedId({ state: value, id: id, timing: timing });
   };
-  const TodoLiClickHandler = (e) => {
-    setClickedId({ state: true, id: e.target.id, timing: "" });
+  const TodoLiClickHandler = (e: React.MouseEvent<HTMLLIElement>) => {
+    console.log(e);
+
+    setClickedId({ state: true, id: (e.target as HTMLLIElement).id, timing: "" });
   };
   return (
     <TodoContainer>

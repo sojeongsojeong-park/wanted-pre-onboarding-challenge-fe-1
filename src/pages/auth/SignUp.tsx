@@ -10,10 +10,10 @@ function SignUp() {
   const emailValidation = emailRegex.test(idInput);
   const passwordValidation = passwordInput.length < 8;
 
-  const idChangeHandler = (e) => {
+  const idChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdInput(e.target.value);
   };
-  const passwordChangeHandler = (e) => {
+  const passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(e.target.value);
   };
   const signupClickHandler = async () => {

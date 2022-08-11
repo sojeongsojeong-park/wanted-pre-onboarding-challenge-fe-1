@@ -2,8 +2,23 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UpdateTodo from "./UpdateTodo";
 
-function TodoDetail({ id, token, updateTodoHandler }) {
-  const [data, setData] = useState({});
+interface TodoDetailType {
+  TodoDetailProps: { id: string; token: string; updateTodoHandler: any };
+  TodoData: {
+    title: string;
+    content: string;
+  };
+}
+
+function TodoDetail({
+  id,
+  token,
+  updateTodoHandler,
+}: TodoDetailType["TodoDetailProps"]) {
+  const [data, setData] = useState<TodoDetailType["TodoData"]>({
+    title: "",
+    content: "",
+  });
   const [updateClick, setUpdateClick] = useState(false);
 
   useEffect(() => {
@@ -38,7 +53,7 @@ function TodoDetail({ id, token, updateTodoHandler }) {
       console.log("alive");
     }
   };
-  const updateClickHandler = (value) => {
+  const updateClickHandler = (value: boolean) => {
     setUpdateClick(value);
   };
 

@@ -2,7 +2,12 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-function Nav({ handleLoginToken, token }) {
+interface NavProps {
+  handleLoginToken: any;
+  token: string;
+}
+
+function Nav({ handleLoginToken, token }: NavProps) {
   const logoutClickHandler = () => {
     localStorage.removeItem("token");
     handleLoginToken(null);

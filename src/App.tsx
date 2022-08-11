@@ -8,13 +8,13 @@ import Todo from "./pages/Todo";
 
 function App() {
   const [isLoggedin, setIsLoggedIn] = useState(localStorage.getItem("token"));
-  const handleLoginToken = (value) => {
+  const handleLoginToken = (value: string | null) => {
     setIsLoggedIn(value);
   };
 
   return (
     <BrowserRouter>
-      <Nav handleLoginToken={handleLoginToken} token={isLoggedin}></Nav>
+      <Nav handleLoginToken={handleLoginToken} token={isLoggedin!}></Nav>
       <Routes>
         <Route path='/' element={<Todo />} />
         <Route

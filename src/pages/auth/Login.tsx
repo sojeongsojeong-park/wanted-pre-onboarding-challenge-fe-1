@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-function Login({ handleLoginToken }) {
+function Login({ handleLoginToken }: any) {
   const [idInput, setIdInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const navigate = useNavigate();
@@ -12,10 +12,10 @@ function Login({ handleLoginToken }) {
   const emailValidation = emailRegex.test(idInput);
   const passwordValidation = passwordInput.length < 8;
 
-  const idChangeHandler = (e) => {
+  const idChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdInput(e.target.value);
   };
-  const passwordChangeHandler = (e) => {
+  const passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(e.target.value);
   };
   const loginClickHandler = async () => {

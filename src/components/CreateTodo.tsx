@@ -1,31 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-function UpdateTodo({ id, updateTodoHandler, updateClickHandler, token }) {
+interface CreateTodoProps {
+  createTodoHandler: any;
+  token: string;
+}
+
+function CreateTodo({ createTodoHandler, token }: CreateTodoProps) {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoContent, setTodoContent] = useState("");
 
-  useEffect(() => {
-    (async () => {
-      await fetch(`http://localhost:8080/todos/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setTodoTitle(res.data.title);
-          setTodoContent(res.data.content);
-        });
-    })();
-  }, []);
-
-  const titleChangeHandler = (e) => {
+  const titleChangeHandler = (e: any) => {
     setTodoTitle(e.target.value);
   };
-  const contentChangeHandler = (e) => {
+  const contentChangeHandler = (e: any) => {
     setTodoContent(e.target.value);
   };
   const clickHandler = async () => {
@@ -34,8 +22,8 @@ function UpdateTodo({ id, updateTodoHandler, updateClickHandler, token }) {
       content: todoContent.toString(),
     };
     try {
-      await fetch(`http://localhost:8080/todos/${id}`, {
-        method: "PUT",
+      await fetch("http://localhost:8080/todos", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -44,45 +32,40 @@ function UpdateTodo({ id, updateTodoHandler, updateClickHandler, token }) {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.data) alert("정상적으로 저장되었습니다.");
+          if (res.data) alert("success!");
           if (res.details) alert(res.details);
-          updateTodoHandler(true, id, Date.now());
-          updateClickHandler(false);
+          createTodoHandler(false);
         });
     } catch (e) {
       console.error(e);
     }
   };
-  const cancelUpdateClickHandler = () => {
-    updateClickHandler(false);
+  const closeClickHandler = () => {
+    createTodoHandler(false);
   };
   return (
-    <UpdateTodoSection onClick={cancelUpdateClickHandler}>
-      <UpdateTodoBox onClick={(e) => e.stopPropagation()}>
-        <Close onClick={cancelUpdateClickHandler}>╳</Close>
+    <CreateTodoSection onClick={closeClickHandler}>
+      <CreateTodoBox onClick={(e) => e.stopPropagation()}>
+        <Close onClick={closeClickHandler}>╳</Close>
         <Input
           placeholder='What you have todo?'
           value={todoTitle}
           onChange={titleChangeHandler}
         />
         <TodoDetail
-          cols='30'
-          rows='10'
+          cols={30}
+          rows={10}
           value={todoContent}
           onChange={contentChangeHandler}
         />
-        <ButtonContainer>
-          <Button onClick={clickHandler}>update Todo</Button>
-          <Button onClick={cancelUpdateClickHandler}>cancel</Button>
-        </ButtonContainer>
-      </UpdateTodoBox>
-    </UpdateTodoSection>
+        <CreateButton onClick={clickHandler}>create Todo</CreateButton>
+      </CreateTodoBox>
+    </CreateTodoSection>
   );
 }
 
-export default UpdateTodo;
-
-const UpdateTodoSection = styled.section`
+export default CreateTodo;
+const CreateTodoSection = styled.section`
   width: 100vw;
   height: 100vh;
   background-color: rgba(255, 255, 255, 0.4);
@@ -90,7 +73,7 @@ const UpdateTodoSection = styled.section`
   top: 5rem;
   left: 0;
 `;
-const UpdateTodoBox = styled.div`
+const CreateTodoBox = styled.div`
   width: 30rem;
   height: 30rem;
   background-color: #fff;
@@ -118,15 +101,9 @@ const TodoDetail = styled.textarea`
   padding: 0.5rem;
   box-sizing: border-box;
 `;
-const ButtonContainer = styled.ul`
-  width: 80%;
-  display: flex;
-  justify-content: space-evenly;
-  margin: 4rem auto 0;
-`;
-const Button = styled.button`
+const CreateButton = styled.button`
   display: block;
-  width: 10rem;
+  width: 20rem;
   height: 3rem;
   font-size: 1.5rem;
   color: #555;
