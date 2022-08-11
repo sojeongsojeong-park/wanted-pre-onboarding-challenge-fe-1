@@ -22,14 +22,12 @@ function Todo() {
     timing: "",
   });
   useEffect(() => {
-    (async () => {
-      await fetch("http://localhost:8080/todos", {
-        method: "GET",
-        headers: requestHeaders,
-      })
-        .then((res) => res.json())
-        .then((res) => setGetTodo(res.data));
-    })();
+    fetch("http://localhost:8080/todos", {
+      method: "GET",
+      headers: requestHeaders,
+    })
+      .then((res) => res.json())
+      .then((res) => setGetTodo(res.data));
   }, [createState, clickedId.timing]);
 
   const createTodoHandler = (value: boolean) => {

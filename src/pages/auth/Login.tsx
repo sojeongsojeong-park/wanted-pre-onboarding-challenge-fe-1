@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { loginAPI } from "../../api/authAPI";
 
 function Login({ handleLoginToken }: any) {
   const [idInput, setIdInput] = useState("");
@@ -34,13 +35,7 @@ function Login({ handleLoginToken }: any) {
           password: passwordInput,
         };
 
-        await fetch("http://localhost:8080/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
+        loginAPI(data)
           .then((res) => res.json())
           .then((res) => {
             if (res.token) localStorage.setItem("token", res.token);

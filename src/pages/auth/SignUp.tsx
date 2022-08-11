@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { signupAPI } from "../../api/authAPI";
 
 function SignUp() {
   const [idInput, setIdInput] = useState("");
@@ -9,6 +11,7 @@ function SignUp() {
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   const emailValidation = emailRegex.test(idInput);
   const passwordValidation = passwordInput.length < 8;
+  const navigator = useNavigate();
 
   const idChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdInput(e.target.value);
@@ -16,7 +19,7 @@ function SignUp() {
   const passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(e.target.value);
   };
-  const signupClickHandler = async () => {
+  const signupClickHandler = () => {
     if (!emailValidation) {
       alert("이메일을 확인해 주세요.");
     } else if (passwordValidation) {
@@ -29,19 +32,14 @@ function SignUp() {
           password: passwordInput,
         };
 
-        await fetch("http://localhost:8080/users/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
+        signupAPI(data)
           .then((res) => res.json())
           .then((res) => {
             if (res.token) localStorage.setItem("token", res.token);
             if (res.message) alert(res.message);
             if (res.details) alert(res.details);
-          });
+          })
+          .then(() => navigator("/auth/login"));
       } catch (e) {
         console.error(e);
       }
