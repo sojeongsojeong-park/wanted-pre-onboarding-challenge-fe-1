@@ -4,11 +4,14 @@ import TodoDetail from "../components/TodoDetail";
 import styled from "styled-components";
 
 interface TodoType {
-  token: string | null;
   clickedId: { state: boolean; id: string; timing: string };
+  todoData: { id: string; title: string };
 }
 
-const token = localStorage.getItem("token");
+const token: string | null = localStorage.getItem("token");
+const requestHeaders: HeadersInit = new Headers();
+requestHeaders.set("Content-Type", "application/json");
+requestHeaders.set("Authorization", token!);
 
 function Todo() {
   const [createState, setCreateState] = useState(false);
@@ -22,10 +25,7 @@ function Todo() {
     (async () => {
       await fetch("http://localhost:8080/todos", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
+        headers: requestHeaders,
       })
         .then((res) => res.json())
         .then((res) => setGetTodo(res.data));
@@ -41,13 +41,17 @@ function Todo() {
   const TodoLiClickHandler = (e: React.MouseEvent<HTMLLIElement>) => {
     console.log(e);
 
-    setClickedId({ state: true, id: (e.target as HTMLLIElement).id, timing: "" });
+    setClickedId({
+      state: true,
+      id: (e.target as HTMLLIElement).id,
+      timing: "",
+    });
   };
   return (
     <TodoContainer>
       <AddTodo onClick={() => createTodoHandler(true)}> + add todo</AddTodo>
       <TodoUl isClicked={clickedId.state}>
-        {getTodo.map((data, idx) => {
+        {getTodo.map((data: TodoType["todoData"], idx) => {
           return (
             <TodoLi
               key={idx}
@@ -64,11 +68,11 @@ function Todo() {
         <TodoDetail
           updateTodoHandler={updateTodoHandler}
           id={clickedId.id}
-          token={token}
+          token={token!}
         />
       )}
       {createState && (
-        <CreateTodo createTodoHandler={createTodoHandler} token={token} />
+        <CreateTodo createTodoHandler={createTodoHandler} token={token!} />
       )}
     </TodoContainer>
   );
@@ -95,7 +99,7 @@ const AddTodo = styled.button`
 const TodoContainer = styled.div`
   width: 100vw;
 `;
-const TodoUl = styled.ul`
+const TodoUl = styled.ul<{ isClicked: boolean }>`
   width: 15rem;
   margin: ${(props) => (props.isClicked ? "0 calc(35vw - 7.5rem)" : "auto")};
 `;
