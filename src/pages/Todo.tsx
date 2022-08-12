@@ -2,30 +2,25 @@ import React, { useEffect, useState } from "react";
 import CreateTodo from "../components/CreateTodo";
 import TodoDetail from "../components/TodoDetail";
 import styled from "styled-components";
+import { getAllTodo } from "../api/todoAPI";
+
+const token: string | null = localStorage.getItem("token");
 
 interface TodoType {
   clickedId: { state: boolean; id: string; timing: string };
   todoData: { id: string; title: string };
 }
 
-const token: string | null = localStorage.getItem("token");
-const requestHeaders: HeadersInit = new Headers();
-requestHeaders.set("Content-Type", "application/json");
-requestHeaders.set("Authorization", token!);
-
 function Todo() {
   const [createState, setCreateState] = useState(false);
   const [getTodo, setGetTodo] = useState([]);
-  const [clickedId, setClickedId] = useState<TodoType["clickedId"]>({
+  const [clickedId, setClickedId] = useState<TodoType["clickedId"]>({ 
     state: false,
     id: "",
     timing: "",
   });
   useEffect(() => {
-    fetch("http://localhost:8080/todos", {
-      method: "GET",
-      headers: requestHeaders,
-    })
+    getAllTodo()
       .then((res) => res.json())
       .then((res) => setGetTodo(res.data));
   }, [createState, clickedId.timing]);

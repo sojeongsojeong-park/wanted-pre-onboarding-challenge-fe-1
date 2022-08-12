@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UpdateTodo from "./UpdateTodo";
+import { deleteTodoById, getTodoById } from "../api/todoAPI";
 
 interface TodoDetailType {
   TodoDetailProps: { id: string; token: string; updateTodoHandler: any };
@@ -12,7 +13,6 @@ interface TodoDetailType {
 
 function TodoDetail({
   id,
-  token,
   updateTodoHandler,
 }: TodoDetailType["TodoDetailProps"]) {
   const [data, setData] = useState<TodoDetailType["TodoData"]>({
@@ -22,28 +22,14 @@ function TodoDetail({
   const [updateClick, setUpdateClick] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      await fetch(`http://localhost:8080/todos/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => setData(res.data));
-    })();
+    getTodoById(id)
+      .then((res) => res.json())
+      .then((res) => setData(res.data));
   }, [id, updateClick]);
 
-  const deleteClickHandler = async () => {
+  const deleteClickHandler = () => {
     if (window.confirm("are you sure to delete?")) {
-      await fetch(`http://localhost:8080/todos/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      })
+      deleteTodoById(id)
         .then((res) => res.json())
         .then((res) => {
           if (res.data === null) alert("deleted!");
@@ -68,7 +54,6 @@ function TodoDetail({
       {updateClick && (
         <UpdateTodo
           id={id}
-          token={token}
           updateTodoHandler={updateTodoHandler}
           updateClickHandler={updateClickHandler}
         />

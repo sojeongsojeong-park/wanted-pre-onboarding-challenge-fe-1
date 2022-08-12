@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { createTodo } from "../api/todoAPI";
 
 interface CreateTodoProps {
   createTodoHandler: any;
   token: string;
 }
 
-function CreateTodo({ createTodoHandler, token }: CreateTodoProps) {
+function CreateTodo({ createTodoHandler }: CreateTodoProps) {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoContent, setTodoContent] = useState("");
 
@@ -16,20 +17,13 @@ function CreateTodo({ createTodoHandler, token }: CreateTodoProps) {
   const contentChangeHandler = (e: any) => {
     setTodoContent(e.target.value);
   };
-  const clickHandler = async () => {
+  const clickHandler = () => {
     const data = {
       title: todoTitle.toString(),
       content: todoContent.toString(),
     };
     try {
-      await fetch("http://localhost:8080/todos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(data),
-      })
+      createTodo(data)
         .then((res) => res.json())
         .then((res) => {
           if (res.data) alert("success!");

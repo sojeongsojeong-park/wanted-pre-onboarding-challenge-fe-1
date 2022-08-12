@@ -1,37 +1,28 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getTodoById, modifyTodoById } from "../api/todoAPI";
 
 interface TodoDetailType {
   id: string;
   updateTodoHandler: any;
   updateClickHandler: any;
-  token: string;
 }
 
 function UpdateTodo({
   id,
   updateTodoHandler,
   updateClickHandler,
-  token,
 }: TodoDetailType) {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoContent, setTodoContent] = useState("");
 
   useEffect(() => {
-    (async () => {
-      await fetch(`http://localhost:8080/todos/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setTodoTitle(res.data.title);
-          setTodoContent(res.data.content);
-        });
-    })();
+    getTodoById(id)
+      .then((res) => res.json())
+      .then((res) => {
+        setTodoTitle(res.data.title);
+        setTodoContent(res.data.content);
+      });
   }, []);
 
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,20 +31,13 @@ function UpdateTodo({
   const contentChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTodoContent(e.target.value);
   };
-  const clickHandler = async () => {
+  const clickHandler = () => {
     const data = {
       title: todoTitle.toString(),
       content: todoContent.toString(),
     };
     try {
-      await fetch(`http://localhost:8080/todos/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(data),
-      })
+      modifyTodoById(id, data)
         .then((res) => res.json())
         .then((res) => {
           if (res.data) alert("정상적으로 저장되었습니다.");
