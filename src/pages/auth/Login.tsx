@@ -19,7 +19,7 @@ function Login({ handleLoginToken }: any) {
   const passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(e.target.value);
   };
-  const loginClickHandler = async () => {
+  const loginClickHandler = () => {
     if (localStorage.getItem("token")) {
       navigate("/");
     } else if (!emailValidation) {
@@ -38,13 +38,13 @@ function Login({ handleLoginToken }: any) {
         loginAPI(data)
           .then((res) => res.json())
           .then((res) => {
-            if (res.token) localStorage.setItem("token", res.token);
+            if (res.token) {
+              localStorage.setItem("token", res.token);
+              handleLoginToken(res.token);
+              navigate("/");
+            }
             if (res.message) alert("login success!");
             if (res.details) alert(res.details);
-          })
-          .then(() => {
-            handleLoginToken(localStorage.getItem("token"));
-            navigate("/");
           });
       } catch (e) {
         console.error(e);

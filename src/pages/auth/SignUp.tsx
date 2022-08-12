@@ -35,11 +35,12 @@ function SignUp() {
         signupAPI(data)
           .then((res) => res.json())
           .then((res) => {
-            if (res.token) localStorage.setItem("token", res.token);
+            if (res.token) {
+              navigator("/auth/login");
+            }
             if (res.message) alert(res.message);
             if (res.details) alert(res.details);
-          })
-          .then(() => navigator("/auth/login"));
+          });
       } catch (e) {
         console.error(e);
       }
