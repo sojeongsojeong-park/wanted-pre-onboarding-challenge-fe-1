@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { signupAPI } from "../../api/authAPI";
+import authValidation from "../../function/authValidation";
 
 function SignUp() {
   const [idInput, setIdInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
-  const emailRegex =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  const emailValidation = emailRegex.test(idInput);
-  const passwordValidation = passwordInput.length < 8;
   const navigator = useNavigate();
 
   const idChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,12 +17,9 @@ function SignUp() {
     setPasswordInput(e.target.value);
   };
   const signupClickHandler = () => {
-    if (!emailValidation) {
-      alert("이메일을 확인해 주세요.");
-    } else if (passwordValidation) {
-      alert("비밀번호는 8자 이상이어야 합니다.");
-    }
-    if (emailValidation && !passwordValidation) {
+    const validCheck = authValidation(idInput, passwordInput);
+
+    if (validCheck) {
       try {
         const data = {
           email: idInput,

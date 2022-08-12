@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { loginAPI } from "../../api/authAPI";
+import authValidation from "../../function/authValidation";
 
 function Login({ handleLoginToken }: any) {
   const [idInput, setIdInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const navigate = useNavigate();
-
-  const emailRegex =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  const emailValidation = emailRegex.test(idInput);
-  const passwordValidation = passwordInput.length < 8;
 
   const idChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdInput(e.target.value);
@@ -20,15 +16,9 @@ function Login({ handleLoginToken }: any) {
     setPasswordInput(e.target.value);
   };
   const loginClickHandler = () => {
-    if (localStorage.getItem("token")) {
-      navigate("/");
-    } else if (!emailValidation) {
-      alert("Please check your email address");
-    } else if (passwordValidation) {
-      alert("password must be over 8 letters");
-    }
+    const validCheck = authValidation(idInput, passwordInput);
 
-    if (emailValidation && !passwordValidation) {
+    if (validCheck) {
       try {
         const data = {
           email: idInput,
