@@ -8,7 +8,6 @@
     <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=black"/>
     <img src="https://img.shields.io/badge/Typescript-3178C6?style=flat&logo=Typescript&logoColor=white"/>
     <img src="https://img.shields.io/badge/styled components-DB7093?style=flat&logo=styled-components&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Javscript-F7DF1E?style=flat&logo=Javascript&logoColor=white"/>
   
   </p>
 </div>
