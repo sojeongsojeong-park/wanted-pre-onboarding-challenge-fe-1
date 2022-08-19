@@ -34,8 +34,10 @@
 
 ## 한계점 및 개선사항 작성
 
-<input type="checkbox"> React Query와 redux 적용하기  
-<input type="checkbox"> 제대로 된 타입스크립트를 적용하기
+<div>
+  <input type="checkbox"> React Query와 redux 적용하기<br/>
+  <input type="checkbox"> 제대로 된 타입스크립트를 적용하기
+</div>
 
 <!-- ## 💡상태관리 툴을 사용하지 않은 이유
 
